@@ -1,0 +1,50 @@
+{
+  "name": "ERP \u2192 Copilot (Webhook)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "erp/event"
+      },
+      "id": "Webhook",
+      "name": "Webhook ERP",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        280,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "http://python-api:8080/webhook/erp",
+        "jsonParameters": true,
+        "sendHeaders": true,
+        "headerParametersJson": "={\"X-ERP-Signature\": $json.signature || \"\"}",
+        "bodyParametersJson": "={{$json}}"
+      },
+      "id": "Forward",
+      "name": "Forward to API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        560,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook ERP": {
+      "main": [
+        [
+          {
+            "node": "Forward to API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
